@@ -23,10 +23,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author andrey
- */
 public class App {
 
     private static final int FIVE_MINUTE = 1000 * 60 * 5;
