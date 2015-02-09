@@ -55,6 +55,24 @@ public class App {
         return date;
     }
 
+    // запрос на удаление директории
+    private boolean askDelete(Path file, String nameDir) throws IOException {
+        Scanner in = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Directory " + nameDir + " is exists! Do you want to delete? (Y/N)");
+            String sIn = in.nextLine();
+            if (sIn.equalsIgnoreCase("Y")) {
+                deleteDirectory(file);
+                break;
+            } else if (sIn.equalsIgnoreCase("N")) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // проверка директории на то, обрабатывалась ли она ранее скриптом, нет ли в ней лишних каталогов
     private boolean checkDir() {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(filePath))) {
@@ -64,17 +82,9 @@ public class App {
 
                     if (nameDir.contains(NEW_DIRNAME)) {
 
-                        Scanner in = new Scanner(System.in);
-
-                        while (true) {
-                            System.out.println("Directory " + nameDir + " is exists! Do you want to delete? (Y/N)");
-                            String sIn = in.nextLine();
-                            if (sIn.equalsIgnoreCase("Y")) {
-                                deleteDirectory(file);
-                                break;
-                            } else if (sIn.equalsIgnoreCase("N")) {
-                                return false;
-                            }
+                        // если хотя бы раз откажется удалять сгенерированный каталог - прервем обработку
+                        if (!askDelete(file, nameDir)) {
+                            return false;
                         }
                     }
                 }
@@ -192,8 +202,8 @@ public class App {
         String sFilePath = "";
         String sFileExt = "";
 
-        // sFilePath = "E:\\DCIM\\PHOTO\\TEST";
-        // sFileExt = ".JPG";
+//         sFilePath = "E:\\DCIM\\PHOTO\\TEST";
+//         sFileExt = ".JPG";
 
         // обработаем параметры
         for (String s : args) {
